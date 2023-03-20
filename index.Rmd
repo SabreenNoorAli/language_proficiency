@@ -2,8 +2,10 @@
 title: "Language Proficiency in Adult L2 learning"
 output: 
   flexdashboard::flex_dashboard:
-    vertical_layout: scroll
-    css: styles.css
+    theme: flatly
+    social: menu
+    orientation: columns
+    vertical_layout: fill
 ---
 
 ```{r setup, include=TRUE, eval=TRUE}
@@ -88,8 +90,8 @@ library(viridisLite)
 
 ```
 
-Row {data-width=400}
------------------------------------------------------------------------
+Sidebar {.sidebar}
+=====================================
 
 #### Language Proficiency in Adult learners
 
@@ -103,29 +105,54 @@ This dataset contains information on the proficiency and linguistic characterist
 
 #### Purpose of Experiment
 
-  The main goal of the current study was to examine whether increasing attentional effort (intensity of attention) via goal-setting can lead to a reduction in lapses of attention. 
+  The main goal of the current analysis is to examine language proficiency in adults learners who have moved to another country.
 
 #### Data Collection
 
-  81 subjects completed the experiment in-person using an eye-tracker in exchange for class credit. 
+  52035 participants took the Dutch language proficiency test, to examine different constructs of their Dutch language ability.
   
-#### 4-Choice Reaction Time Task Paradigm  
+  #### Background on Second Language Acquisition
 
-  Participants completed a 4-choice reaction time task containing 180 trials that was programmed with E-Prime 2.0. Each trial starts on a grey screen with a 1-s fixation (+). Then, four dark-grey lines appear in a row at the center of the screen. After a random time interval (1-3 s in .250 second intervals), a dark_grey target (X)  appears above one of the lines. The participant’s objective is to press the key on the keyboard that corresponds to the location of the target (‘c’,’v’,’b’,’n’). After the participant’s response, they see a 1-s feedback screen showing whether their answer was correct or incorrect, with correct answers also displaying their reaction time. Pupil size data is being collected concurrently for each trial.
+The field of second-language acquisition is regarded by some but not everybody as a sub-discipline of applied linguistics but also receives research attention from a variety of other disciplines, such as psychology and education.
 
-#### Goal-Setting Instructions
+A central theme in SLA research is that of inter language: the idea that the language that learners use is not simply the result of differences between the languages that they already know and the language that they are learning, but a complete language system in its own right, with its own systematic rules. This interlanguage gradually develops as learners are exposed to the targeted language. The order in which learners acquire features of their new language stays remarkably constant, even for learners with different native languages and regardless of whether they have had language instruction. However, languages that learners already know can have a significant influence on the process of learning a new one. This influence is known as language transfer. 
 
-  This experiment has two conditions: control (no-goal) and harder-over-time (HOT). In the control condition, participants receive the following instructions: “Your goal on this task is to respond as quickly and accurately as possible.” In the HOT condition, the participants receive the initial instruction: "Your goal on this task is to keep your reaction times under .425 seconds." This applies to the first block. For block 2, the participants are told: "Your new goal on this task is to keep your reaction times under .375 seconds." Finally, block 3 has the instruction: "Your new goal on this task is to keep your reaction times under .325 seconds."
-  
-#### Background on Sustained Attention and Attention Lapses
+Demographics {data-icon="demmoicon.png"} 
+===================================== 
 
-Sustained attention involves maintaining your focus on a task for a period of time that can range from seconds to hours. The ability to sustain attention in this manner is a key component of our attentional system that is vital to everyday life. It is heavily influenced by factors such as: motivation, arousal, and alertness (Sadaghiani & D’Esposito, 2015; Jennings & van der Molen, 2005; Steinborn, Langner, & Huestegge, 2017; Unsworth & Miller, 2021). Sometimes tasks requiring sustained attention are relatively boring and unchallenging (also referred to as vigilant attention; Robertson, Manly, Andrade, Baddeley, & Yiend, 1997; Robertson & O’Connell, 2010). Multiple studies have found evidence that it is typically harder to maintain attention on tasks that are boring/easy and repetitive versus ones that require some sort of cognitive challenge (Robertson & O’Connell, 2010; Langner & Eickhoff, 2013). Although we generally perform fine in sustained attention situations, occasionally we experience lapses in attention. These could be, for example, daydreaming about a new crush, being distracted by honking cars driving by, or even just having your mind go blank. Essentially, attention lapses reflect momentary shifts of attention away from the task at hand that can lead to failures in completing intended actions (Casner & Schooler, 2014; Lindquist & McLean, 2011; Unsworth, Robison, & Miller, 2021; Unsworth & McMillan, 2017). The consequences of which range from forgetting to forward an email to your colleague to missing a red light and causing a car accident. Given how common attention lapses are, it is vital to investigate ways in which we can reduce their occurrence and severity. 
-
-
-Row {data-width=250}
+Column
 -----------------------------------------------------------------------
 
-### Final Visual 1
+### Speaking scores in different countries
+
+```{r}
+fig4 <- ggplot(desc1, aes(x = AoA, y = Speaking, color = Sex, fill = Sex)) +
+  facet_wrap(~C) +
+  geom_point() + 
+  labs(title = "Association of Language Acquistion and Speaking Proficiency",
+       subtitle = "How does the age of acquistion of langauge affects the verbal proficiency",
+       x = "Age of Acquistion",
+       y = "Speaking Scores", 
+       Caption = "color = Sex") +
+  theme(legend.position = "none",
+        axis.title=element_text(size=10,face="bold"),
+        axis.text=element_text(size=8),
+        title=element_text(size=10), 
+        strip.text = element_text(size = 5, margin = margin()), 
+        strip.text.y = element_text(angle = 0),
+        plot.caption = element_text(hjust=0.5), 
+        strip.background=element_rect(colour="black",
+                                    fill="#CC79A7"))
+
+ggplotly(fig4)
+```
+
+Language Learning {data-icon="abilityicon.png"} 
+===================================== 
+
+Column
+-----------------------------------------------------------------------
+
 ### Ability to learn new sounds
 
 ```{r}
@@ -148,18 +175,23 @@ theme_minimal() +
 ggplotly(fig3)
 ```
 
-Row {data-height=350}
------------------------------------------------------------------------
+Association {data-icon="asso.png"} 
+===================================== 
+
+Column
+-----------------------------------------------------------------------------
 
 ### Association of language profieciency with 1st language 
 
 ```{r}
-fig <- ggplot2::ggplot(data = desc5, aes(x=Speaking, y=L1)) + geom_point(aes(color =Family))
+fig <- ggplot(data = desc5, aes(x=Speaking, y=L1)) + 
+  geom_point(aes(color =Family))
 ggplotly(fig)
-fig
 ```
-Column {data-width=350}
+
+Column
 -----------------------------------------------------------------------
+
 ### Association of langauge proficiency with Family background
 
 ```{r}
@@ -168,34 +200,11 @@ df2 <- as.data.frame(desc3)
 fig2 <- ggplot(data=df2, aes(x=feature, y=Family, fill=sound)) +
   geom_tile() +
   scale_fill_viridis(discrete=FALSE, option="A",
-                     name="Speaking scores association with Family") +
+                     name="") +
   xlab("Speaking Scores")+
   ylab("Country")+
   theme(legend.position='top', panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
 panel.background = element_blank())
-fig2
+ggplotly(fig2)
 ```
-Row {data-height=350}
------------------------------------------------------------------------
-### Speaking scores in different countries
-```{r}
-fig4 <- ggplot(desc1, aes(x = AoA, y = Speaking, color = Sex, fill = Sex)) +
-  facet_wrap(~C) +
-  geom_point() + 
-  labs(title = "Association of Language Acquistion and Speaking Proficiency",
-       subtitle = "How does the age of acquistion of langauge affects the verbal proficiency",
-       x = "Age of Acquistion",
-       y = "Speaking Scores", 
-       Caption = "color = Sex") +
-  theme(legend.position = "none",
-        axis.title=element_text(size=10,face="bold"),
-        axis.text=element_text(size=8),
-        title=element_text(size=10), 
-        strip.text = element_text(size = 5, margin = margin()), 
-        strip.text.y = element_text(angle = 0),
-        plot.caption = element_text(hjust=0.5), 
-        strip.background=element_rect(colour="black",
-                                    fill="#CC79A7"))
 
-ggplotly(fig4)
-```
