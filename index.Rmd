@@ -190,7 +190,6 @@ sexfig <- ggplot(Sex, aes(x = Sex, y = n)) +
   geom_bar(stat="identity", color='skyblue',fill='steelblue') +
   theme(axis.text.x=element_text(angle=45, hjust=1)) + 
   theme(legend.position = "none") +
-  coord_flip() + 
    labs(x = "Age of Acquistion",
        y = "Frequency")
    
@@ -303,5 +302,16 @@ ggplotly(fig2)
 Correlation {data-icon="asso.png"} 
 ===================================== 
 
+#### Correlation between contructs of language ability
+
+```{r cor1, echo=FALSE, fig.cap="Correlation", out.width = '100%'}
+knitr::include_graphics("cor1.png")
+```
+
+#### Overall Correlation Scores
+
+```{r cor2, echo=FALSE, fig.cap="Correlation", out.width = '100%'}
+knitr::include_graphics("cor2.png")
+```
 
 The graphs on this page are referenced from Kaggle notebook by Dan Dominco. 
