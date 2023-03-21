@@ -148,7 +148,7 @@ Sidebar {.sidebar}
 =====================================
 
 ```{r picture, echo = F, out.width = '15%', fig.align="left"}
-knitr::include_graphics("EDLDlogo.jpeg")
+knitr::include_graphics("logo.png")
 ```
 
 Sabreen NoorAli is a second year Ph.D. student at University of Oregon studying Communication disorders and sciences. Her research interest includes bilingual language assessments and intervention from linguistically diverse population. 
