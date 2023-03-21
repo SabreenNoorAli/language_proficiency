@@ -4,8 +4,8 @@ output:
   flexdashboard::flex_dashboard:
     theme: flatly
     social: menu
-    orientation: columns
-    vertical_layout: fill
+    orientation:
+    vertical_layout: scroll
 ---
 
 ```{r setup, include=TRUE, eval=TRUE}
@@ -36,18 +36,26 @@ stex <- read.csv("~/desktop/language_proficiency/stex.csv")
 
 require(psych)
 desc <- describeBy(stex$Speaking,
-                   group=list(stex$Sex,stex$C),mat=TRUE)
+                   group=list(stex$C),mat=TRUE)
+
 desc1 <- describeBy(stex$lex,
                    group=list(stex$Sex,stex$C), mat=TRUE)
 library(tidyr)
 desc1 <- stex %>%
   group_by(C, Sex) %>%
-  summarize(Speaking = mean(Speaking,na.rm = T),
+  summarise(Speaking = mean(Speaking),
             morph = mean(morph),
             lex = mean(lex),
             L1 = frequency(L1),
             AoA = mean(AaA))
 desc1 <- desc1 %>% drop_na()
+
+desc1_new <- filter(desc1, C %in% c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China",  "Cyprus", 
+"Georgia", "India", "Indonesia", "Iran", "Iraq", "Israel", 
+"Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", 
+"Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Oman", "Pakistan", "Philippines", "Qatar", "Russia", "Saudi Arabia", "Singapore", 
+"South Korea", "Sri Lanka", "Palestine", "Syria", "Tajikistan", "Thailand", 
+"Timor-Leste", "Turkey", "Turkmenistan", "United Arab Emirates", "Uzbekistan"))
 
 desc2 <- stex %>%
 group_by(Family, L1) %>%
@@ -87,17 +95,69 @@ desc6 <- desc6 %>% drop_na()
 library(viridis)
 library(viridisLite)
 
+desc7 <- stex %>%
+  group_by(C, Family, L1, L2) %>%
+  summarise(Speaking = mean(Speaking,na.rm = T),
+            morph = mean(morph),
+            lex = mean(lex),
+            LoR = mean(LoR),
+            AoA = mean(AaA), 
+            day = mean(Edu.day),
+            enroll = mean(Enroll))
+desc7 <- desc7 %>% drop_na()
+
+desc8 <- desc7 %>% 
+  group_by(C, Family, sort = TRUE) %>%
+  summarise(Speaking)
+
+US <- filter(stex, C %in% "UnitedStates")
+US <- US %>% 
+  group_by(L1) %>%
+  count()
+
+India <- filter(stex, C %in% "India")
+India <- India %>% 
+  group_by(C, Family, L1, L2, sort = TRUE) %>%
+  count()
+
+UK <- filter(stex, C %in% "UnitedKingdom")
+UK <- UK %>% 
+  group_by(C, Family, L1, L2, sort = TRUE) %>%
+  count()
+
+Australia <- filter(stex, C %in% "Australia")
+Australia <- Australia %>% 
+  group_by(C, Family, L1, L2, sort = TRUE) %>%
+  count()
+
+L1 <- stex %>%
+  group_by(L1) %>%
+  count() %>%
+  arrange(desc(n))
+
+Sex <- stex %>%
+  group_by(Sex) %>%
+  count() %>%
+  arrange(desc(n))
+
+L1_new <- L1[-(16:70),]
 
 ```
 
 Sidebar {.sidebar}
 =====================================
 
-#### Language Proficiency in Adult learners
-
-```{r picture, echo = F, out.width = '5%', fig.align="left"}
+```{r picture, echo = F, out.width = '15%', fig.align="left"}
 knitr::include_graphics("EDLDlogo.jpeg")
 ```
+
+Sabreen NoorAli is a second year Ph.D. student at University of Oregon studying Communication disorders and sciences. Her research interest includes bilingual language assessments and intervention from linguistically diverse population. 
+
+This dashboard has been created as part of the final project of the data visualization course. 
+
+
+About {data-icon="demmoicon.png"} 
+===================================== 
 
 #### About the data
 
@@ -111,7 +171,7 @@ This dataset contains information on the proficiency and linguistic characterist
 
   52035 participants took the Dutch language proficiency test, to examine different constructs of their Dutch language ability.
   
-  #### Background on Second Language Acquisition
+#### Background on Second Language Acquisition
 
 The field of second-language acquisition is regarded by some but not everybody as a sub-discipline of applied linguistics but also receives research attention from a variety of other disciplines, such as psychology and education.
 
@@ -121,31 +181,41 @@ Demographics {data-icon="demmoicon.png"}
 ===================================== 
 
 Column
------------------------------------------------------------------------
-
-### Speaking scores in different countries
+---------------------------------------------------------------
+### Participants Based on Gender
 
 ```{r}
-fig4 <- ggplot(desc1, aes(x = AoA, y = Speaking, color = Sex, fill = Sex)) +
-  facet_wrap(~C) +
-  geom_point() + 
-  labs(title = "Association of Language Acquistion and Speaking Proficiency",
-       subtitle = "How does the age of acquistion of langauge affects the verbal proficiency",
-       x = "Age of Acquistion",
-       y = "Speaking Scores", 
-       Caption = "color = Sex") +
-  theme(legend.position = "none",
-        axis.title=element_text(size=10,face="bold"),
-        axis.text=element_text(size=8),
-        title=element_text(size=10), 
-        strip.text = element_text(size = 5, margin = margin()), 
-        strip.text.y = element_text(angle = 0),
-        plot.caption = element_text(hjust=0.5), 
-        strip.background=element_rect(colour="black",
-                                    fill="#CC79A7"))
 
-ggplotly(fig4)
-```
+sexfig <- ggplot(Sex, aes(x = Sex, y = n)) + 
+  geom_bar(stat="identity", color='skyblue',fill='steelblue') +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+  theme(legend.position = "none") +
+  coord_flip() + 
+   labs(x = "Age of Acquistion",
+       y = "Frequency")
+   
+   ggplotly(sexfig)
+       
+``` 
+Column
+----------------------------------------------------
+
+### Top 15 Languages Spoken by the participants
+
+```{r}
+
+L1fig <- ggplot(L1_new, aes(x = L1, y = n)) + 
+  geom_bar(stat="identity", color='skyblue',fill='steelblue') +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+  theme(legend.position = "none") +
+  coord_flip() + 
+   labs(x = "Frequency",
+       y = "Languages")
+   ggplotly(L1fig)
+       
+``` 
+
+
 
 Language Learning {data-icon="abilityicon.png"} 
 ===================================== 
@@ -159,7 +229,7 @@ Column
 fig3 <- ggplot(data=desc6, aes(x= C, 
                                y=sounds, 
                                color= as.factor(L1),
-                               label=as.factor(L1))) +
+                               label=as.factor(L2))) +
   geom_point(size=4) +
   theme_bw() +
   labs(x = "Country", 
@@ -169,10 +239,34 @@ fig3 <- ggplot(data=desc6, aes(x= C,
   geom_label_repel(aes(fill = factor(L1)), colour = "white", fontface = "bold") + 
 theme_minimal() +
   theme(legend.position="none",
-        axis.title=element_text(size=14,face="bold"),
+        axis.title=element_text(size=12,face="bold"),
         axis.text=element_text(size=10),
-        title=element_text(size=16))
+        title=element_text(size=12))
 ggplotly(fig3)
+```
+
+### Speaking scores in different countries
+
+```{r}
+fig4 <- ggplot(desc1_new, aes(x = AoA, y = Speaking, color = Sex)) +
+  facet_wrap(~C) +
+  geom_point() + 
+  labs(title = "Association of Language Acquistion and Speaking Proficiency",
+       subtitle = "How does the age of acquistion of langauge affects the verbal proficiency",
+       x = "Age of Acquistion",
+       y = "Speaking Scores", 
+       Caption = "color = Sex") +
+  theme(legend.position = "none",
+        axis.title=element_text(size=12,face="bold"),
+        axis.text=element_text(size=10),
+        title=element_text(size=12), 
+        strip.text = element_text(size = 9, margin = margin()), 
+        strip.text.y = element_text(angle = 5),
+        plot.caption = element_text(hjust=0.5), 
+        strip.background=element_rect(colour="black",
+                                    fill="#CC79A7"))
+
+ggplotly(fig4)
 ```
 
 Association {data-icon="asso.png"} 
@@ -189,8 +283,6 @@ fig <- ggplot(data = desc5, aes(x=Speaking, y=L1)) +
 ggplotly(fig)
 ```
 
-Column
------------------------------------------------------------------------
 
 ### Association of langauge proficiency with Family background
 
@@ -208,3 +300,8 @@ panel.background = element_blank())
 ggplotly(fig2)
 ```
 
+Correlation {data-icon="asso.png"} 
+===================================== 
+
+
+The graphs on this page are referenced from Kaggle notebook by Dan Dominco. 
