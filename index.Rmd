@@ -177,6 +177,9 @@ The field of second-language acquisition is regarded by some but not everybody a
 
 A central theme in SLA research is that of inter language: the idea that the language that learners use is not simply the result of differences between the languages that they already know and the language that they are learning, but a complete language system in its own right, with its own systematic rules. This interlanguage gradually develops as learners are exposed to the targeted language. The order in which learners acquire features of their new language stays remarkably constant, even for learners with different native languages and regardless of whether they have had language instruction. However, languages that learners already know can have a significant influence on the process of learning a new one. This influence is known as language transfer. 
 
+#### Data Source
+Schepens, Job, Roeland van Hout, and T. Florian Jaeger. “Big Data Suggest Strong Constraints of Linguistic Similarity on Adult Language Learning.” Cognition 194 (January 1, 2020): 104056. https://doi.org/10.1016/j.cognition.2019.104056.
+
 Demographics {data-icon="demmoicon.png"} 
 ===================================== 
 
@@ -194,6 +197,7 @@ sexfig <- ggplot(Sex, aes(x = Sex, y = n)) +
        y = "Frequency")
    
    ggplotly(sexfig)
+
        
 ``` 
 Column
